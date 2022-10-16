@@ -279,6 +279,13 @@ def login():
                 'SELECT * FROM user WHERE username = ?', (username,)
             ).fetchone()
             
+            ##UPDATED VERIFICATION
+            
+            if username != user['username']:
+                error='Incorrect username or password'
+                flash(error)
+                return render_template('auth/login.html')
+            
             if not user and not password:
                 error = 'Incorrect username or password'
             elif not check_password_hash(user['password'], password + user['salt']):
@@ -337,5 +344,4 @@ def send_email(credentials, receiver, subject, message):
     smtp.login(credentials['user'], credentials['password'])
     smtp.sendmail(credentials['user'], receiver, email.as_string())
     smtp.quit()
-    
-    
+
